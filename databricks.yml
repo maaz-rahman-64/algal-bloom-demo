@@ -1,0 +1,55 @@
+bundle:
+  name: algal-watch
+
+variables:
+  catalog:
+    description: >-
+      Unity Catalog catalog for all water-quality schemas. Created by the data
+      generator if it does not exist (needs CREATE CATALOG); otherwise pass an
+      existing catalog with --var catalog=<name>.
+    default: algal_watch
+  schema_prefix:
+    description: Prefix for water-quality schemas (raw / validated / gold)
+    default: water
+  as_of_date:
+    description: The demo's "today" — synthetic data and forecasts are anchored to this date
+    default: "2026-09-28"
+  scenario:
+    description: >-
+      Scenario file in src/scenarios/ (without .json) that defines the monitoring
+      sites, the demo storyline and the seeded alert history
+    default: inland_rivers
+  amber_biovolume:
+    description: Cyanobacteria biovolume (mm³/L) at which a site is Amber
+    default: "0.4"
+  red_biovolume:
+    description: Cyanobacteria biovolume (mm³/L) at which a site is Red
+    default: "4.0"
+  red_probability:
+    description: Forecast probability at which a day is called Red
+    default: "0.6"
+  genie_description:
+    description: Description shown on the Genie space
+    default: >-
+      Natural-language Q&A over blue-green algae risk at water-quality monitoring
+      sites: current alert tiers, sensor QA events and council duty contacts.
+  lakebase_project_id:
+    description: Lakebase Postgres project ID for the app's notification log (unique per workspace)
+    default: algal-watch
+
+include:
+  - resources/*.yml
+
+# The workspace comes from your CLI profile: deploy with `-p <profile>`. To pin a
+# target to a workspace instead, add under it:
+#   workspace:
+#     host: https://<your-workspace>.cloud.databricks.com
+targets:
+  dev:
+    mode: development
+    default: true
+  prod:
+    mode: production
+    workspace:
+      # Production mode needs an explicit, single deployment location.
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}

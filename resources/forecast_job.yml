@@ -1,0 +1,19 @@
+resources:
+  jobs:
+    alert_level_forecast:
+      name: "[${bundle.target}] Alert Level Forecast - Train Register Score Explain"
+      # No cluster spec: runs on serverless jobs compute. lightgbm and shap are
+      # installed by the notebook's %pip cell (serverless has no cluster libraries).
+      tasks:
+        - task_key: train_register_score_explain
+          notebook_task:
+            notebook_path: ../src/notebooks/alert_level_forecast.py
+            base_parameters:
+              catalog: ${var.catalog}
+              schema_prefix: ${var.schema_prefix}
+              as_of_date: ${var.as_of_date}
+              amber_biovolume: ${var.amber_biovolume}
+              red_biovolume: ${var.red_biovolume}
+              red_probability: ${var.red_probability}
+      queue:
+        enabled: true

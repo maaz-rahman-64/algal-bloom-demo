@@ -1,0 +1,123 @@
+# Genie validates its tables at create time, so this space is created only after
+# the bootstrap run of the orchestration job has populated the gold schema
+# (see resources/algal_watch_orchestration_job.yml).
+resources:
+  genie_spaces:
+    water_quality_site_risk_explorer:
+      title: Water Quality Site Risk Explorer
+      # Referencing the bootstrap run orders this space after the run that builds
+      # its tables (Genie rejects spaces whose tables don't exist yet).
+      description: "${var.genie_description} Tables built by job run ${resources.job_runs.algal_watch_bootstrap.id}."
+      warehouse_id: ${resources.sql_warehouses.algal_watch_warehouse.id}
+      serialized_space:
+        version: 2
+        data_sources:
+          tables:
+            - identifier: ${var.catalog}.${var.schema_prefix}_gold.council_contacts
+              column_configs:
+                - column_name: contact_email
+                - column_name: contact_name
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: contact_phone
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: contact_role
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: council_name
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: site_id
+                  enable_format_assistance: true
+                - column_name: site_name
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: valley
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+            - identifier: ${var.catalog}.${var.schema_prefix}_gold.sensor_qa_events
+              column_configs:
+                - column_name: episode_end
+                  enable_format_assistance: true
+                - column_name: episode_start
+                  enable_format_assistance: true
+                - column_name: event_date
+                  enable_format_assistance: true
+                - column_name: event_week
+                  enable_format_assistance: true
+                - column_name: excluded_readings
+                  enable_format_assistance: true
+                - column_name: qa_flag
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: qa_reason
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: site_id
+                  enable_format_assistance: true
+                - column_name: site_name
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: valley
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+            - identifier: ${var.catalog}.${var.schema_prefix}_gold.site_status
+              column_configs:
+                - column_name: biovolume_mm3_l
+                  enable_format_assistance: true
+                - column_name: council_name
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: current_tier
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: dominant_genus
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: flow_delta_7d_pct
+                  enable_format_assistance: true
+                - column_name: flow_ml_day
+                  enable_format_assistance: true
+                - column_name: phycocyanin_trend
+                  enable_format_assistance: true
+                - column_name: qa_excluded_24h
+                  enable_format_assistance: true
+                - column_name: river
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: site_id
+                  enable_format_assistance: true
+                - column_name: site_name
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: site_type
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: tier_since
+                  enable_format_assistance: true
+                - column_name: updated_at
+                  enable_format_assistance: true
+                - column_name: validated_sample_date
+                  enable_format_assistance: true
+                - column_name: valley
+                  enable_format_assistance: true
+                  enable_entity_matching: true
+                - column_name: water_temp_c
+                  enable_format_assistance: true
+                - column_name: water_temp_delta_7d
+                  enable_format_assistance: true
+        benchmarks:
+          questions:
+            - id: "01f1c1fbac7e14af8bb62efdf6e1fcf9"
+              question:
+                - "Which sites are currently at Red alert level?"
+              answer:
+                - format: SQL
+                  content:
+                    - "SELECT site_name, valley, biovolume_mm3_l, validated_sample_date "
+                    - "FROM ${var.catalog}.${var.schema_prefix}_gold.site_status "
+                    - "WHERE current_tier = 'Red' "
+                    - "ORDER BY biovolume_mm3_l DESC"
+              evaluation_note:
+                - "Should list every site whose current tier is Red, highest biovolume first."

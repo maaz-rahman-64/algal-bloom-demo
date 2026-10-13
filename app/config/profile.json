@@ -1,0 +1,24 @@
+{
+  "productName": "Algal Watch",
+  "organisation": "Algal Watch",
+  "logo": null,
+  "brandColour": "#1d4ed8",
+  "locale": "en-US",
+  "defaultRegion": null,
+  "persona": {
+    "name": "Jess Nguyen",
+    "email": "jess.nguyen@example.org",
+    "role": "Regional Officer"
+  },
+  "messages": {
+    "redAlert": "{organisation} has raised a Red-level blue-green algae alert for {siteName} ({biovolume} mm³/L, {genus} dominant). Please issue public warnings: avoid contact and find an alternative water source.",
+    "forecastRed": "{organisation} forecasts a likely Red-level blue-green algae alert for the {river} at {siteName}{when}. The site is currently {tierNow} ({biovolume} mm³/L, {genus} dominant). We recommend preparing public advice for recreational and other water users. We'll confirm with the next lab result.",
+    "amberAlert": "Amber-level blue-green algae alert for {siteName} ({biovolume} mm³/L, {genus} dominant). Recommend increased sampling and preparing public advice.",
+    "generic": "{organisation} notification regarding a {tier} alert at {siteName}."
+  },
+  "tierGuidance": {
+    "Green": "Low. Routine monitoring.",
+    "Amber": "Medium. Increase sampling and tell the council.",
+    "Red": "High. Council warns the public: avoid contact, find another water source."
+  }
+}

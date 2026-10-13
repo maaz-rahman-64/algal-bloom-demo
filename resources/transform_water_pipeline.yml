@@ -1,0 +1,20 @@
+resources:
+  pipelines:
+    transform_water:
+      name: Transform water
+      serverless: true
+      channel: CURRENT
+      catalog: ${var.catalog}
+      # Default schema only; every table is published with a fully qualified
+      # name into the ${var.schema_prefix}_raw / _validated / _gold schemas.
+      schema: ${var.schema_prefix}_validated
+      libraries:
+        - glob:
+            include: ../src/pipeline/**
+      configuration:
+        algal.catalog: ${var.catalog}
+        algal.schema_prefix: ${var.schema_prefix}
+        algal.landing_path: /Volumes/${var.catalog}/${var.schema_prefix}_raw/landing
+        algal.as_of_date: ${var.as_of_date}
+        algal.amber_biovolume: ${var.amber_biovolume}
+        algal.red_biovolume: ${var.red_biovolume}

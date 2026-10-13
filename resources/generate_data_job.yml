@@ -1,0 +1,19 @@
+resources:
+  jobs:
+    generate_data:
+      name: "[${bundle.target}] Generate water-quality data"
+      # No cluster spec: notebook tasks run on serverless jobs compute.
+      tasks:
+        - task_key: generate_data
+          notebook_task:
+            notebook_path: ../src/notebooks/01_generate_data.py
+            base_parameters:
+              catalog: ${var.catalog}
+              schema_prefix: ${var.schema_prefix}
+              as_of_date: ${var.as_of_date}
+              seed: "20261005"
+              scenario_file: ${workspace.file_path}/src/scenarios/${var.scenario}.json
+              amber_biovolume: ${var.amber_biovolume}
+              red_biovolume: ${var.red_biovolume}
+      queue:
+        enabled: true

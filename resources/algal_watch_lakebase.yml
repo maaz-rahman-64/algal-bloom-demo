@@ -1,0 +1,9 @@
+resources:
+  # Lakebase Postgres (autoscaling) project backing the app's notification /
+  # acknowledgement log. The default `production` branch and
+  # `databricks-postgres` database are created with the project.
+  postgres_projects:
+    algal_watch_lakebase:
+      project_id: ${var.lakebase_project_id}
+      display_name: Algal Watch
+      pg_version: 17

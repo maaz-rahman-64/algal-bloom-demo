@@ -1,0 +1,40 @@
+resources:
+  jobs:
+    algal_watch_end_to_end:
+      name: "[${bundle.target}] Algal Watch - End-to-end build"
+      description: >-
+        One-click build of the whole demo: generate synthetic landing data, run the
+        Transform water pipeline (full refresh: raw -> validated -> gold), then train,
+        register, score and explain the alert-level forecast model. All serverless.
+      tasks:
+        - task_key: generate_data
+          run_job_task:
+            job_id: ${resources.jobs.generate_data.id}
+        - task_key: transform_water
+          depends_on:
+            - task_key: generate_data
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.transform_water.id}
+            # The generator rewrites the landing files on every run, so a full
+            # refresh keeps the Auto Loader streaming tables free of duplicates.
+            full_refresh: true
+        - task_key: train_forecast_model
+          depends_on:
+            - task_key: transform_water
+          run_job_task:
+            job_id: ${resources.jobs.alert_level_forecast.id}
+      queue:
+        enabled: true
+
+  # Runs the end-to-end job once during `bundle deploy`, so the gold tables exist
+  # before the Genie space (which validates its tables) and the app are created.
+  # Re-runs automatically when the data / pipeline / model code changes; for any
+  # other refresh, run the job from the UI or `databricks bundle run algal_watch_end_to_end`.
+  job_runs:
+    algal_watch_bootstrap:
+      job_id: ${resources.jobs.algal_watch_end_to_end.id}
+      lifecycle:
+        triggers:
+          - on_file_change: ../src/notebooks/*.py
+          - on_file_change: ../src/pipeline/*.py
+          - on_file_change: ../src/scenarios/*.json

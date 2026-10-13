@@ -1,0 +1,56 @@
+resources:
+  apps:
+    algal_watch:
+      name: algal-watch
+      description: Water-quality monitoring dashboard with forecast, site signals, and Genie Q&A
+      source_code_path: ../app
+      # On-behalf-of-user access: the analytics queries and council contacts run as
+      # the signed-in user (sql), and Ask Genie calls the Genie API as them.
+      user_api_scopes:
+        - sql
+        - dashboards.genie
+      resources:
+        - name: sql-warehouse
+          sql_warehouse:
+            id: ${resources.sql_warehouses.algal_watch_warehouse.id}
+            permission: CAN_USE
+        - name: genie-space
+          genie_space:
+            name: ${resources.genie_spaces.water_quality_site_risk_explorer.title}
+            space_id: ${resources.genie_spaces.water_quality_site_risk_explorer.id}
+            permission: CAN_RUN
+        - name: postgres
+          postgres:
+            branch: projects/${var.lakebase_project_id}/branches/production
+            database: projects/${var.lakebase_project_id}/branches/production/databases/databricks-postgres
+            permission: CAN_CONNECT_AND_CREATE
+      config:
+        command:
+          - npm
+          - run
+          - start
+        env:
+          - name: DATABRICKS_WAREHOUSE_ID
+            value_from: sql-warehouse
+          - name: DATABRICKS_GENIE_SPACE_ID
+            value_from: genie-space
+          # PGHOST / PGDATABASE / PGUSER / PGPORT / PGSSLMODE are injected by the
+          # postgres resource; only the endpoint path must be wired explicitly.
+          - name: LAKEBASE_ENDPOINT
+            value_from: postgres
+          - name: DATABRICKS_WORKSPACE_HOST
+            value: ${workspace.host}
+          # Rendered into config/queries/*.sql by scripts/render-queries.mjs.
+          - name: ALGAL_CATALOG
+            value: ${var.catalog}
+          - name: ALGAL_SCHEMA_PREFIX
+            value: ${var.schema_prefix}
+          # Alert-tier thresholds, served to the client via /api/config.
+          - name: ALGAL_AMBER_BIOVOLUME
+            value: ${var.amber_biovolume}
+          - name: ALGAL_RED_BIOVOLUME
+            value: ${var.red_biovolume}
+          - name: ALGAL_RED_PROBABILITY
+            value: ${var.red_probability}
+      lifecycle:
+        started: true

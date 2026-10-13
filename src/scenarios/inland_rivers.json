@@ -1,0 +1,54 @@
+{
+  "description": "Twelve monitoring sites (reservoirs and river reaches) across three Northern California watersheds north and south of the San Francisco Bay Area. Site and agency names are public places; every measurement, contact and alert is synthetic.",
+  "contacts": {
+    "faker_locale": "en_US",
+    "mobile_prefix": "707",
+    "mobile_digits": 7,
+    "email_domain": "agency.example",
+    "role": "Water Quality Duty Officer"
+  },
+  "season": {
+    "peak_day_of_year": 213,
+    "bloom_months": [7, 8, 9]
+  },
+  "sites": [
+    { "site_id": "LMN", "site_name": "Lake Mendocino", "site_type": "Reservoir", "valley": "Russian River", "river": "Russian River", "council_name": "Mendocino County Environmental Health", "latitude": 39.20, "longitude": -123.18, "base_flow_ml_day": 520.0 },
+    { "site_id": "LSO", "site_name": "Lake Sonoma", "site_type": "Reservoir", "valley": "Russian River", "river": "Dry Creek", "council_name": "Sonoma County Environmental Health", "latitude": 38.72, "longitude": -123.01, "base_flow_ml_day": 380.0 },
+    { "site_id": "HOP", "site_name": "Hopland", "site_type": "River", "valley": "Russian River", "river": "Russian River", "council_name": "Mendocino County Environmental Health", "latitude": 38.97, "longitude": -123.11, "base_flow_ml_day": 640.0 },
+    { "site_id": "HBG", "site_name": "Healdsburg", "site_type": "River", "valley": "Russian River", "river": "Russian River", "council_name": "City of Healdsburg", "latitude": 38.61, "longitude": -122.87, "base_flow_ml_day": 820.0 },
+    { "site_id": "GUE", "site_name": "Guerneville", "site_type": "River", "valley": "Russian River", "river": "Russian River", "council_name": "Sonoma County Environmental Health", "latitude": 38.50, "longitude": -123.00, "base_flow_ml_day": 900.0 },
+    { "site_id": "MON", "site_name": "Monte Rio", "site_type": "River", "valley": "Russian River", "river": "Russian River", "council_name": "Sonoma County Environmental Health", "latitude": 38.465, "longitude": -123.01, "base_flow_ml_day": 930.0 },
+    { "site_id": "HEN", "site_name": "Lake Hennessey", "site_type": "Reservoir", "valley": "Napa Valley", "river": "Conn Creek", "council_name": "City of Napa Water Division", "latitude": 38.49, "longitude": -122.36, "base_flow_ml_day": 210.0 },
+    { "site_id": "STH", "site_name": "St. Helena", "site_type": "River", "valley": "Napa Valley", "river": "Napa River", "council_name": "City of St. Helena", "latitude": 38.505, "longitude": -122.47, "base_flow_ml_day": 260.0 },
+    { "site_id": "NAP", "site_name": "Napa", "site_type": "River", "valley": "Napa Valley", "river": "Napa River", "council_name": "Napa County Environmental Health", "latitude": 38.30, "longitude": -122.285, "base_flow_ml_day": 340.0 },
+    { "site_id": "AND", "site_name": "Anderson Reservoir", "site_type": "Reservoir", "valley": "Santa Clara Valley", "river": "Coyote Creek", "council_name": "Santa Clara County Parks", "latitude": 37.17, "longitude": -121.63, "base_flow_ml_day": 300.0 },
+    { "site_id": "COL", "site_name": "Coyote Lake", "site_type": "Reservoir", "valley": "Santa Clara Valley", "river": "Coyote Creek", "council_name": "Santa Clara County Parks", "latitude": 37.11, "longitude": -121.55, "base_flow_ml_day": 180.0 },
+    { "site_id": "COY", "site_name": "Coyote Creek at San Jose", "site_type": "River", "valley": "Santa Clara Valley", "river": "Coyote Creek", "council_name": "City of San Jose Environmental Services", "latitude": 37.34, "longitude": -121.87, "base_flow_ml_day": 240.0 }
+  ],
+  "storyline": {
+    "breach_site": "HBG",
+    "breach_forecast_air_temp_c": [24.0, 25.0, 26.0, 27.0, 35.0, 36.0, 36.5],
+    "red_site": "LMN",
+    "red_site_sample_time": "07:05",
+    "sensor_fault_site": "GUE",
+    "sensor_fault_prior_biovolume": 0.18,
+    "warming_valley": "Russian River",
+    "current_biovolume": { "LMN": 6.8, "LSO": 0.22, "HOP": 1.35, "HBG": 3.80, "MON": 0.28, "HEN": 1.10, "STH": 0.31, "NAP": 0.25, "AND": 7.4, "COL": 0.18, "COY": 0.20 }
+  },
+  "alert_history": [
+    { "alert_id": "ALT-001", "site_id": "LMN", "alert_type": "tier_alert", "tier": "Red", "raised": { "days_ago": 0, "time": "07:05" }, "recipient": "mendocino.duty", "status": "council_notified", "actioned": { "days_ago": 0, "time": "07:47" },
+      "message": "A Red-level blue-green algae alert has been raised for Lake Mendocino (Coyote Valley Dam) from a validated lab result (6.8 mm³/L, Microcystis dominant). Please issue public warnings: avoid contact and find an alternative water source." },
+    { "alert_id": "ALT-002", "site_id": "HBG", "alert_type": "forecast_advisory", "tier": "Amber", "raised": { "days_ago": 0, "time": "06:30" }, "recipient": "healdsburg.duty", "status": "awaiting_officer", "actioned": null,
+      "message": "Likely Red in five days" },
+    { "alert_id": "ALT-003", "site_id": "AND", "alert_type": "tier_alert", "tier": "Red", "raised": { "days_ago": 1, "time": "10:15" }, "recipient": "santaclara.duty", "status": "awaiting_officer", "actioned": null,
+      "message": "Validated Red-tier sample" },
+    { "alert_id": "ALT-004", "site_id": "HOP", "alert_type": "tier_alert", "tier": "Amber", "raised": { "days_ago": 2, "time": "08:00" }, "recipient": "mendocino.duty", "status": "acknowledged", "actioned": { "days_ago": 2, "time": "08:35" },
+      "message": "Amber-level monitoring acknowledged. Holding for the next lab result before notifying the county." },
+    { "alert_id": "ALT-005", "site_id": "HEN", "alert_type": "tier_alert", "tier": "Amber", "raised": { "days_ago": 3, "time": "09:20" }, "recipient": "napa.duty", "status": "awaiting_officer", "actioned": null,
+      "message": "Amber-tier monitoring initiated" },
+    { "alert_id": "ALT-006", "site_id": "GUE", "alert_type": "sensor_quality", "tier": "Green", "raised": { "days_ago": 0, "time": "05:45" }, "recipient": "sonoma.duty", "status": "awaiting_officer", "actioned": null,
+      "message": "Probable fouled probe isolated" },
+    { "alert_id": "ALT-007", "site_id": "HBG", "alert_type": "tier_alert", "tier": "Amber", "raised": { "days_ago": 2, "time": "14:24" }, "recipient": "healdsburg.duty", "status": "council_notified", "actioned": { "days_ago": 2, "time": "15:02" },
+      "message": "Amber-level blue-green algae alert for the Russian River at Healdsburg from a validated lab result. Recommend increased sampling and preparing public advice." }
+  ]
+}
